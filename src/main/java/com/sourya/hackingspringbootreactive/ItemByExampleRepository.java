@@ -1,5 +1,8 @@
 package com.sourya.hackingspringbootreactive;
 
-public interface ItemByExampleRepository {
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+
+public interface ItemByExampleRepository extends ReactiveMongoRepository<Item, String> {
+	
 
 }

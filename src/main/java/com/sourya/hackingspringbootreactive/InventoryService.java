@@ -5,9 +5,15 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.data.mongodb.core.ReactiveFluentMongoOperations;
+import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
+import static org.springframework.data.mongodb.query.Criteria.where;
+import static org.springframework.data.mongodb.query.Criteria.byExample;
+import static org.springframework.data.mongodb.query.Criteria.Query.query;
 
+
+@Service
 public class InventoryService {
 	
 	private ItemRepository repository;
@@ -68,5 +74,17 @@ public class InventoryService {
 				.all();
 	}
 	
-	
+	Flux<Item> searchByFluentExample(String name, String description, boolean useAnd){
+		Item item = new Item(name, description, 0.0);
+		ExampleMatcher matcher = (useAnd ? 
+				ExampleMatcher.matchingAll()
+				: ExampleMatcher.matchingAny())
+				.withStringMatcher(StringMatcher.CONTAINING)
+				.withIgnoreCase()
+				.withIgnorePaths("price");
+		
+		return fluentOperations.query(Item.class)
+				.matching(query(byExample(Example.of(item, matcher))))
+				.all();
+	}
 }

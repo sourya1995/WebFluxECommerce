@@ -22,6 +22,16 @@ public class Item {
 		this.description = description;
 		this.price = price;
 	}
+	
+	
+	public Item(String id, String name, double price, String description) {
+	
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.description = description;
+	}
+	
 	public String getId() {
 		return id;
 	}
